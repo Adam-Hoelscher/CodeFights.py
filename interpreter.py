@@ -20,16 +20,16 @@ def interpreter(program):
             except:
                 cells.append(0)
         elif token == '[':
-            open = int(not cells[position])
-            while not open:
+            open = int(cells[position] == 0)
+            while open:
                 i += 1
                 if program[i] == '[':
                     open += 1
                 elif program[i] == ']':
                     open -= 1
         elif token == ']':
-            open = int(not cells[position])
-            while not open:
+            open = int(cells[position] != 0)
+            while open:
                 i -= 1
                 if program[i] == ']':
                     open += 1
