@@ -105,7 +105,7 @@ if __name__ == '__main__':
     print(singlePointOfFailure(connections), True)
 
     # test the algorithm using example 9
-    with open('singlePointOfFailure.txt') as file:
+    with open('./data/singlePointOfFailure.txt') as file:
         input = file.readlines()
     input = [str(x).strip('\n') for x in input]
     input = [[int(x) for x in line] for line in input]
