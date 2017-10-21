@@ -64,53 +64,50 @@ def singlePointOfFailure(connections):
                     return(True)
             return(False)
 
-    search_node = 0
-    while search_node < len(connections):
-        find_subnet(search_node)
-        search_node += 1
+    def remove_trivial_SPFs():
+        num_del = 0
+        for node_num, conn_set in enumerate(connections):
+            if sum(conn_set) == 1:
+                remove_node(node_num)
+                num_del += 1
+        return(num_del)
 
-    return(search_node - 1)
+    trivial_SPFs = remove_trivial_SPFs()
+
+    node_num = 0
+    while node_num < len(connections):
+        find_subnet(node_num)
+        node_num += 1
+
+    return(len(connections) - 1 + trivial_SPFs)
 
 
 if __name__ == '__main__':
 
-    from random import getrandbits, seed
     from copy import deepcopy
 
-    seed(42)
+    # test the algorithm using example 8
+    connections= [[0, 1, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
+                  [1, 0, 1, 1, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
+                  [1, 1, 0, 0, 0, 1, 1, 0, 0, 0, 0, 0, 0, 0, 0],
+                  [0, 1, 0, 0, 1, 0, 0, 0, 0, 0, 0, 0, 0, 1, 1],
+                  [0, 1, 0, 1, 0, 0, 0, 0, 0, 0, 0, 1, 1, 0, 0],
+                  [0, 0, 1, 0, 0, 0, 1, 0, 0, 1, 1, 0, 0, 0, 0],
+                  [0, 0, 1, 0, 0, 1, 0, 1, 1, 0, 0, 0, 0, 0, 0],
+                  [0, 0, 0, 0, 0, 0, 1, 0, 0, 0, 0, 0, 0, 0, 0],
+                  [0, 0, 0, 0, 0, 0, 1, 0, 0, 0, 0, 0, 0, 0, 0],
+                  [0, 0, 0, 0, 0, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0],
+                  [0, 0, 0, 0, 0, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0],
+                  [0, 0, 0, 0, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
+                  [0, 0, 0, 0, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
+                  [0, 0, 0, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
+                  [0, 0, 0, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0]]
+    print(singlePointOfFailure(connections), True)
 
-    connections= [[0, 1],
-                  [1, 0]]
-
-    def grow():
-        connections.append([])
-        for row in connections[:-1]:
-            thing = getrandbits(1)
-            row.append(thing)
-            connections[-1].append(thing)
-        connections[-1].append(0)
-
-
-    def test_big_o():
-        for size in range(3, 301):
-            grow()
-            rows = len(connections)
-            small = min(len(x) for x in connections)
-            large = max(len(x) for x in connections)
-            print(size, rows, small, large)
-            input = deepcopy(connections)
-            import cProfile
-            cProfile.run('singlePointOfFailure(input)')
-
-
-    def test_9():
-        with open('singlePointOfFailure.txt') as file:
-            connections = file.readlines()
-        connections = [str(x).strip('\n') for x in connections]
-        connections = [[int(x) for x in line] for line in connections]
-        import cProfile
-        print(singlePointOfFailure(connections))
-        cProfile.run('print(singlePointOfFailure(connections))')
-
-
-    test_9()
+    # test the algorithm using example 9
+    with open('singlePointOfFailure.txt') as file:
+        input = file.readlines()
+    input = [str(x).strip('\n') for x in input]
+    input = [[int(x) for x in line] for line in input]
+    connections = deepcopy(input)
+    print(singlePointOfFailure(connections))
