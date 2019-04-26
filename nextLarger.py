@@ -15,4 +15,4 @@ def nextLarger(a):
         if num in seen: seen.rm(num)
         seen = [num] + seen
 
-    return(temp)
+    return temp
