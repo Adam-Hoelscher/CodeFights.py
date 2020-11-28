@@ -5,6 +5,7 @@ def dungeonBlaster(m):
 
     h = len(m)
     w = len(m[0])
+    map = {}
 
     seen = set()
     spaces = set()
@@ -17,21 +18,21 @@ def dungeonBlaster(m):
             pos = x, y
             if square == '*':
                 spaces.add(pos)
-                break
+            map[pos] = square
 
     # while there are spaces we have not explored
     while spaces:
 
-        # explore all the open spaces
-        while spaces:
+        # take a step in each direction
             x, y = spaces.pop()
             for dx, dy in [(0, 1), (0, -1), (1, 0), (-1, 0)]:
 
-                pos = nx, ny = (x + dx) % h, (y + dy) % w
+            pos = (x + dx) % h, (y + dy) % w
+            
                 if pos in seen:
                     continue
 
-                square = m[nx][ny]
+            square = map[pos]
 
                 # if we've found the exit, stop
                 if square == '^':
